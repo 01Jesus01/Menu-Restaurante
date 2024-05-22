@@ -18,9 +18,11 @@
 <body>
     <nav class="navbar navbar-custom navbar-expand-lg">
         <div class="container-fluid">
+           
+
             <div class="navbar-brand-container">
                 <img src="{% static 'images/logo.png' %}" alt="logo" width="90rem">
-                <a class="navbar-brand" href=" ">Tortas Jerry</a>
+                <a class="navbar-brand" href=" ">Tortas jerry</a>
             </div>
     
             <form class="d-flex" role="search">
@@ -28,7 +30,7 @@
                     id="inputBusqueda">
             </form>
             <div id="resultadoBusqueda" class="container_buscador">
-                <!-- Aqui se muestra el container no hay que poner nada aqui :)) -->
+                <!--Aqui se muestra el conatiner no hay que poner nada aqui :)) -->
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -74,7 +76,7 @@
                         {{ platillo.Descripcion }}
                     </div>
                     <a href="#"
-                    onclick="agregarPlatillo('{{ platillo.Nombre }}', '{{ platillo.Descripcion }}', '{{ platillo.imagen.url }}')"
+                    onclick="reproducir('{{ platillo.Nombre }}', '{{ platillo.Descripcion }}', '{{ platillo.imagen.url }}')"
                     style="position: absolute; bottom: 1rem; right: 0;">
                     <img src="{% static 'images/add.png' %}" alt="add" width="60px">
                     </a>
@@ -98,44 +100,52 @@
     </div>
 
     <footer class="mi-footer">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-sm-4 col-lg-4 text-light text-center">
-                    <p>Síguenos en:</p>
-                    <a href="https://www.instagram.com/"><img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://www.facebook.com/?locale=es_LA"><img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
-                            height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://twitter.com/?lang=es"><img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <p>@tHero Sounds</p>
-                </div>
-                <div class="col-sm-3 col-lg-4 text-light text-center">
-                    &copy; 2024 @WebHeros. Todos los derechos reservados.
-                </div>
-                <div class="col-sm-5 col-lg-4 text-center">
-                    <p>Contáctanos por:</p>
-                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        HeroSounds@gmail.com</a></br>
-                    <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        +52-614-285-89-17</a>
-                </div>
+    <div class="container py-5"> <!-- Cambiamos py-4 por py-5 para aumentar la altura -->
+        <div class="row">
+            <div class="col-sm-4 col-lg-4 text-light text-center">
+                <p>Siguenos en:</p>
+                <a href="https://www.instagram.com/"> <img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
+                        alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                <a href="https://www.facebook.com/?locale=es_LA"> <img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
+                        height="30" class="d-inline-block align-text-top"></a>
+                <a href="https://twitter.com/?lang=es"> <img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
+                        alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                <p>@tHero Sounds</p>
+            </div>
+            <div class="col-sm-3 col-lg-4 text-light text-center">
+                &copy; 2024 @WebHeros. Todos los derechos reservados.
+            </div>
+            <div class="col-sm-5 col-lg-4 text-center">
+                <p>Contactanos por: </p>
+                <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
+                        width="15" height="15" class="d-inline-block align-text-top">
+                    HeroSounds@gmail.com</a></br>
+                <a class="link-1"> <img
+                        src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
+                        width="15" height="15" class="d-inline-block align-text-top">
+                    +52-614-285-89-17</a>
             </div>
         </div>
-    </footer>
+    </div>
+    
+</footer>
 
-    <script>
-        function agregarPlatillo(nombre, descripcion, imagenUrl) {
-            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-            platillos.push({ nombre, descripcion, imagenUrl });
-            localStorage.setItem('platillos', JSON.stringify(platillos));
-            window.location.href = '{% url "orden" %}';
-        }
-    </script>
-    <script src="{% static 'js/btn_reproducir.js' %}"></script>
-    <script src="{% static 'js/buscar.js' %}"></script>
+
+
+    
+<!--     
+<footer id="info-cancion" class="d-flex align-content-center flex-column footer-with-shadow">
+    <div class="row">
+        <div id="imagen" class=" img1 col-1"></div>
+        <div id="nombre-artista-cancion" class="col-4 centered-text">Reproduciondo... </div>
+        <div class="col-7">
+            <audio id="reproductor" controls class="audio-container"></audio>
+        </div>
+    </div>
+</footer> -->
+
+<script src="{% static 'js/btn_reproducir.js' %}"></script>
+<script src="{% static 'js/buscar.js' %}"></script>
 </body>
 
 </html>
