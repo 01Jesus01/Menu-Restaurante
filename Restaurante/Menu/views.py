@@ -115,27 +115,3 @@ def show_cliente(request):
     
     # Si no hay búsqueda, renderiza la plantilla con todas las platillos
     return render(request, 'Menu/cliente.html', {'platillos': platillos})
-
-from django.shortcuts import render, get_object_or_404, redirect
-
-def modificar_menu(request, id):
-    # lógica para modificar el menú
-    menu_item = get_object_or_404(Menu, id=id)
-    if request.method == "POST":
-        # Procesar el formulario
-        pass
-    else:
-        # Renderizar el formulario
-        pass
-    return render(request, 'modificar_menu.html', {'menu_item': menu_item})
-
-def eliminar_menu(request, id):
-    # lógica para eliminar el menú
-    menu_item = get_object_or_404(Menu, id=id)
-    if request.method == "POST":
-        menu_item.delete()
-        return redirect('nombre_de_tu_vista_principal')
-    return render(request, 'eliminar_menu.html', {'menu_item': menu_item})
-
-def orden_view(request):
-    return render(request, 'Menu/orden.html')
