@@ -51,24 +51,29 @@
             <thead>
                 <th>Imagen</th>
                 <th>Nombre del platillo</th>
-                <th>Descripcion</th>
+                <th>Descripción</th>
                 <th>Precio</th>
                 <th>Descuento</th>
+                <th>Acciones</th>
             </thead>
             <tbody>
                 {% for menu in Menu %}
                 <tr>
                     <td><img class="img" src="{{ menu.imagen.url }}" alt="imagen" width="120rem"></td>
-                    <td>{{menu.Nombre_platillo}}</td>
-                    <td>{{menu.Descripcion}}</td>
-                    <td>{{menu.Precio}}</td>
-                    <td>{{menu.Descuento}}</td>
+                    <td>{{ menu.Nombre_platillo }}</td>
+                    <td>{{ menu.Descripcion }}</td>
+                    <td>{{ menu.Precio }}</td>
+                    <td>{{ menu.Descuento }}</td>
+                    <td>
+                        <a href="{% url 'modificar_menu' menu.id %}" class="btn btn-primary">Modificar</a>
+                        <a href="{% url 'eliminar_menu' menu.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este platillo?');">Eliminar</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p>No se encontro ninguna cancion</p>
+        <p>No se encontró ningún platillo</p>
         {% endif %}
     </div>
 
