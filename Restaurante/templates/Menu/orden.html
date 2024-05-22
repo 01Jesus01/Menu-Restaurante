@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 
 <head>
@@ -10,27 +9,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <title>Tortas Jerry</title>
+    <title>Lista de Platillos</title>
 </head>
 
 <body>
     <nav class="navbar navbar-custom navbar-expand-lg">
         <div class="container-fluid">
             <div class="navbar-brand-container">
-                <img src="{% static 'images/logo.png' %}" alt="logo" width="90rem">
-                <a class="navbar-brand" href=" ">Tortas Jerry</a>
+                <a class="navbar-brand" href="/">Tortas Jerry</a>
             </div>
-    
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"
-                    id="inputBusqueda">
-            </form>
-            <div id="resultadoBusqueda" class="container_buscador">
-                <!-- Aqui se muestra el container no hay que poner nada aqui :)) -->
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -39,61 +28,20 @@
                         <a class="nav-link active" aria-current="page" href="/">Platillos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Menu/cargar_catalogo/">Categoria</a>
+                        <a class="nav-link" href="/menu/cargar_catalogo/">Categoria</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/Menu/base_menu/" tabindex="-1" aria-disabled="true">Lista</a>
+                        <a class="nav-link" href="/menu/orden/" tabindex="-1" aria-disabled="true">Lista</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    
-    <div class="titulo">
-        <h3>Platillos Recientes</h3>
-    </div>
-    <br><br>
+
     <div class="container">
-        <div class="row">
-            {% with col_class="col-3" %}
-            {% for platillo in platillos %}
-            <div class="{{ col_class }}">
-                <div class="box-img" style="position: relative;">
-                    <div class="texto">
-                        <!-- Nombre del platillo -->
-                        {{ platillo.Nombre }}
-                    </div>
-                    <div class="descuento">
-                        <!-- descuento -->
-                        {{ platillo.Descuento }} %
-                    </div>
-                    <img class="img" src="{{ platillo.imagen.url }}" alt="imagen" width="330rem">
-                    <br>
-                    <div class="texto">
-                        <!-- Descripcion -->
-                        {{ platillo.Descripcion }}
-                    </div>
-                    <a href="#"
-                    onclick="agregarPlatillo('{{ platillo.Nombre }}', '{{ platillo.Descripcion }}', '{{ platillo.imagen.url }}')"
-                    style="position: absolute; bottom: 1rem; right: 0;">
-                    <img src="{% static 'images/add.png' %}" alt="add" width="60px">
-                    </a>
-                </div>
-            </div>
-            {% if forloop.counter|divisibleby:4 %}
-            {% if col_class == "col-3" %}
-            {% with col_class="col-6" %}
-            {% endwith %}
-            {% elif col_class == "col-6" %}
-            {% with col_class="col-9" %}
-            {% endwith %}
-            {% else %}
-            {% with col_class="col-3" %}
-            {% endwith %}
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% endwith %}
+        <h3 class="mt-4">Lista de Platillos</h3>
+        <div class="row" id="listaPlatillos">
+            <!-- Aquí se mostrarán los platillos agregados -->
         </div>
     </div>
 
@@ -127,15 +75,38 @@
     </footer>
 
     <script>
-        function agregarPlatillo(nombre, descripcion, imagenUrl) {
+        document.addEventListener('DOMContentLoaded', () => {
+            const listaPlatillos = document.getElementById('listaPlatillos');
             let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-            platillos.push({ nombre, descripcion, imagenUrl });
-            localStorage.setItem('platillos', JSON.stringify(platillos));
-            window.location.href = '{% url "orden" %}';
-        }
+
+            function renderPlatillos() {
+                listaPlatillos.innerHTML = '';
+                platillos.forEach((platillo, index) => {
+                    let platilloDiv = document.createElement('div');
+                    platilloDiv.className = 'col-md-4';
+                    platilloDiv.innerHTML = `
+                        <div class="card mb-4">
+                            <img src="${platillo.imagenUrl}" class="card-img-top" alt="${platillo.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${platillo.nombre}</h5>
+                                <p class="card-text">${platillo.descripcion}</p>
+                                <button class="btn btn-danger" onclick="borrarPlatillo(${index})">Borrar</button>
+                            </div>
+                        </div>
+                    `;
+                    listaPlatillos.appendChild(platilloDiv);
+                });
+            }
+
+            window.borrarPlatillo = function(index) {
+                platillos.splice(index, 1);
+                localStorage.setItem('platillos', JSON.stringify(platillos));
+                renderPlatillos();
+            };
+
+            renderPlatillos();
+        });
     </script>
-    <script src="{% static 'js/btn_reproducir.js' %}"></script>
-    <script src="{% static 'js/buscar.js' %}"></script>
 </body>
 
 </html>
