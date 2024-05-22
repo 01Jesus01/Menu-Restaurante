@@ -43,4 +43,5 @@ class Orden(models.Model):
     precio_total = models.IntegerField()
     
 class Mesa(models.Model):
+    numero_mesa = models.IntegerField(default=0)
     num_orden = models.ForeignKey(Orden,on_delete=models.CASCADE)
