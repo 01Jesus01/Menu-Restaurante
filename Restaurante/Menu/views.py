@@ -94,5 +94,12 @@ def show_cocina(request):
     return render(request, 'Menu/cocina.html', {'platillos': platillos})
 
 def show_mesero(request):
-    mesero = Mesero.objects.all()
-    return render(request, 'Menu/mesero.html',{'Mesero': mesero})
+    meseros = Mesero.objects.all()
+    ordenes = Orden.objects.all()
+    mesa = Mesa.objects.all()
+    contexto = {
+        'Mesero': meseros,
+        'Orden': ordenes,
+        'Mesa':mesa,
+    }
+    return render(request, 'Menu/Mesero.html', contexto)

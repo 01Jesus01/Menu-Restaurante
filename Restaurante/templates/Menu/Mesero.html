@@ -44,21 +44,24 @@
         </div>
     </nav>
 
-    <h1 class="titulo_tabla">Lista de canciones</h1><br><br>
+
+    <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
     <div class="container">
-        {% if Mesero %}
+        {% if Orden %}
         <table class="table">
             <thead>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Edad</th>
+                <th>Mesero</th>
+                <th>Platillo</th>
+                <th>Comentario</th>
+                <th>Mesa</th>
             </thead>
             <tbody>
-                {% for mesero in Mesero %}
+                {% for mesa in Mesa %}
                 <tr>
-                    <td>{{mesero.nombre}}</td>
-                    <td>{{mesero.apellido}}</td>
-                    <td>{{mesero.edad}}</td>
+                    <td>{{mesa.num_orden.id_mesero.nombre}}</td>
+                    <td>{{mesa.num_orden.id_platillo.Nombre}}</td>
+                    <td>{{mesa.num_orden.comentario}}</td>
+                    <td>{{mesa.id}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -67,6 +70,8 @@
         <p>No se encontro ninguna cancion</p>
         {% endif %}
     </div>
+
+    
 
 
 
