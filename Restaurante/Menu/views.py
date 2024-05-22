@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from Menu.models import Menu, Mesa, Orden, Categoria_platillo  # Importa tu modelo Menu
+from Menu.models import Menu, Mesa, Orden, Categoria_platillo, Mesero # Importa tu modelo Menu
 from . import forms
 from .forms import Form_Comments
 from django.http import JsonResponse
@@ -94,20 +94,5 @@ def show_cocina(request):
     return render(request, 'Menu/cocina.html', {'platillos': platillos})
 
 def show_mesero(request):
-    # Obtén todas las Platillos guardadas
-    platillos = Menu.objects.all()
-    
-    # Verifica si se está realizando una búsqueda
-    if 'q' in request.GET:
-        query = request.GET.get('q')
-        try:
-            platillo = Menu.objects.get(Nombre__iexact=query)
-            resultados = [{'Platillo': platillo.Nombre, 'Categoria': platillo.categoria}]
-            return JsonResponse(resultados, safe=False)
-        except Menu.DoesNotExist:
-            # Handle the case when no matching Menu object is found
-            resultados = [{'Platillo': 'No se encontraron resultados'}]
-            return JsonResponse(resultados, safe=False)
-    
-    # Si no hay búsqueda, renderiza la plantilla con todas las platillos
-    return render(request, 'Menu/mesero.html', {'platillos': platillos})
+    mesero = Mesero.objects.all()
+    return render(request, 'Menu/mesero.html',{'Mesero': mesero})
