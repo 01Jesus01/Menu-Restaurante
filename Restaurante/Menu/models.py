@@ -1,5 +1,5 @@
 from django.db import models
-
+ 
 
 class Mesero(models.Model):
     nombre = models.CharField(max_length=60)
@@ -40,7 +40,8 @@ class Orden(models.Model):
     id_platillo = models.ForeignKey(Menu,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     comentario = models.CharField(max_length=400)
-    precio_total = models.IntegerField()
-    
+    precio_total = models.IntegerField() 
+      
 class Mesa(models.Model):
+    numero_mesa = models.IntegerField(default=0)
     num_orden = models.ForeignKey(Orden,on_delete=models.CASCADE)
