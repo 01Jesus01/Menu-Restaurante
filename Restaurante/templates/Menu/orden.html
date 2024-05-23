@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <title>Lista de Platillos</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-custom navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-brand-container">
+                <a class="navbar-brand" href="/">Tortas Jerry</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/Menu/cliente">Platillos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/menu/cargar_catalogo/">Categoria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Menu/orden/">Lista</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Lista de Platillos</h3>
+                <div class="row" id="listaPlatillos">
+                    <!-- Aquí se mostrarán los platillos agregados -->
+                </div>
+                <div class="mt-4">
+                    <h4>Total de la orden: $<span id="totalOrden">0.00</span></h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="reciboCompra">
+                    <h4>Recibo de Compra</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Descuento</th>
+                                <th>Precio Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reciboDetalles">
+                            <!-- Aquí se mostrarán los detalles del recibo -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Subtotal</th>
+                                <th id="subtotal">$0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">IVA (16%)</th>
+                                <th id="iva">$0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th id="total">$0.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mi-footer">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-sm-4 col-lg-4 text-light text-center">
+                    <p>Síguenos en:</p>
+                    <a href="https://www.instagram.com/"><img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://www.facebook.com/?locale=es_LA"><img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
+                            height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://twitter.com/?lang=es"><img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <p>@tHero Sounds</p>
+                </div>
+                <div class="col-sm-3 col-lg-4 text-light text-center">
+                    &copy; 2024 @WebHeros. Todos los derechos reservados.
+                </div>
+                <div class="col-sm-5 col-lg-4 text-center">
+                    <p>Contáctanos por:</p>
+                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        HeroSounds@gmail.com</a></br>
+                    <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        +52-614-285-89-17</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const listaPlatillos = document.getElementById('listaPlatillos');
+            const totalOrden = document.getElementById('totalOrden');
+            const reciboDetalles = document.getElementById('reciboDetalles');
+            const subtotalEl = document.getElementById('subtotal');
+            const ivaEl = document.getElementById('iva');
+            const totalEl = document.getElementById('total');
+
+            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+
+            function renderPlatillos() {
+                listaPlatillos.innerHTML = '';
+                reciboDetalles.innerHTML = '';
+                let subtotal = 0;
+                let total = 0;
+                platillos.forEach((platillo, index) => {
+                    let precioFinal = platillo.precio - (platillo.precio * (platillo.descuento / 100));
+                    subtotal += precioFinal;
+                    total += precioFinal;
+
+                    let platilloDiv = document.createElement('div');
+                    platilloDiv.className = 'col-md-4';
+                    platilloDiv.innerHTML = `
+                        <div class="card mb-4">
+                            <img src="${platillo.imagenUrl}" class="card-img-top" alt="${platillo.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${platillo.nombre}</h5>
+                                <p class="card-text">${platillo.descripcion}</p>
+                                <p class="card-text">Precio: $${platillo.precio}</p>
+                                <p class="card-text">Descuento: ${platillo.descuento}%</p>
+                                <button class="btn btn-danger" onclick="borrarPlatillo(${index})">Borrar</button>
+                            </div>
+                        </div>
+                    `;
+                    listaPlatillos.appendChild(platilloDiv);
+
+                    let reciboRow = document.createElement('tr');
+                    reciboRow.innerHTML = `
+                        <td>${platillo.nombre}</td>
+                        <td>$${platillo.precio.toFixed(2)}</td>
+                        <td>${platillo.descuento}%</td>
+                        <td>$${precioFinal.toFixed(2)}</td>
+                    `;
+                    reciboDetalles.appendChild(reciboRow);
+                });
+
+                let iva = subtotal * 0.16;
+                let totalConIva = subtotal + iva;
+
+                subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+                ivaEl.textContent = `$${iva.toFixed(2)}`;
+                totalEl.textContent = `$${totalConIva.toFixed(2)}`;
+                totalOrden.textContent = totalConIva.toFixed(2);
+            }
+
+            window.borrarPlatillo = function(index) {
+                platillos.splice(index, 1);
+                localStorage.setItem('platillos', JSON.stringify(platillos));
+                renderPlatillos();
+            };
+
+            renderPlatillos();
+        });
+    </script>
+</body>
+
+</html>
