@@ -28,7 +28,7 @@
                     id="inputBusqueda">
             </form>
             <div id="resultadoBusqueda" class="container_buscador">
-                <!-- Aqui se muestra el container no hay que poner nada aqui :)) -->
+                <!-- Aquí se muestra el container no hay que poner nada aquí :)) -->
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -36,13 +36,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Platillos</a>
+                        <a class="nav-link active" aria-current="page" href="Menu/cliente">Platillos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Menu/cargar_catalogo/">Categoria</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/Menu/cliente/" tabindex="-1" aria-disabled="true">Lista</a>
+                        <a class="nav-link" href="/Menu/cliente/" tabindex="-1" aria-disabled="true">Lista</a>
                     </li>
                 </ul>
             </div>
@@ -74,7 +74,7 @@
                         {{ platillo.Descripcion }}
                     </div>
                     <a href="#"
-                    onclick="agregarPlatillo('{{ platillo.Nombre }}', '{{ platillo.Descripcion }}', '{{ platillo.imagen.url }}')"
+                    onclick="agregarPlatillo('{{ platillo.Nombre }}', '{{ platillo.Descripcion }}', '{{ platillo.imagen.url }}', '{{ platillo.Precio }}', '{{ platillo.Descuento }}')"
                     style="position: absolute; bottom: 1rem; right: 0;">
                     <img src="{% static 'images/add.png' %}" alt="add" width="60px">
                     </a>
@@ -127,9 +127,9 @@
     </footer>
 
     <script>
-        function agregarPlatillo(nombre, descripcion, imagenUrl) {
+        function agregarPlatillo(nombre, descripcion, imagenUrl, precio, descuento) {
             let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-            platillos.push({ nombre, descripcion, imagenUrl });
+            platillos.push({ nombre, descripcion, imagenUrl, precio: parseFloat(precio), descuento: parseFloat(descuento) });
             localStorage.setItem('platillos', JSON.stringify(platillos));
             window.location.href = '{% url "orden" %}';
         }
