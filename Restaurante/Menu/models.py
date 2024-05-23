@@ -41,6 +41,7 @@ class Orden(models.Model):
     cantidad = models.IntegerField()
     comentario = models.CharField(max_length=400)
     precio_total = models.IntegerField()
+    estado = models.BooleanField(default=True)
     
 class Mesa(models.Model):
     numero_mesa = models.IntegerField(default=0)

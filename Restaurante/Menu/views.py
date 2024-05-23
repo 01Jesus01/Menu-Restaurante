@@ -96,7 +96,7 @@ def show_cocina(request):
 def show_mesero(request):
     meseros = Mesero.objects.all()
     ordenes = Orden.objects.all()
-    mesa = Mesa.objects.all()
+    mesa = Mesa.objects.order_by('numero_mesa') 
     contexto = {
         'Mesero': meseros,
         'Orden': ordenes,
