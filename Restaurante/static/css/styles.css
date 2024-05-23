@@ -201,6 +201,9 @@ footer, #reproductor {
 .table th, .table td {
     padding: 8px;
     text-align: center;
+    margin: auto;
+    height: 50px; /* Ajusta la altura según tus necesidades /
+    vertical-align: middle; / Centrar verticalmente el contenido */
 }
 
 .table th {
