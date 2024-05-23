@@ -1,5 +1,19 @@
+from django.contrib.auth.models import User
 from django.db import models
 
+class Perfil(models.Model):
+    USUARIO_CHOICES = (
+        ('administrador', 'Administrador'),
+        ('cliente', 'Cliente'),
+        ('mesero', 'Mesero'),
+        ('cocinero', 'Cocinero'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    tipo_usuario = models.CharField(max_length=20, choices=USUARIO_CHOICES)
+    
+    def __str__(self):
+        return f'{self.user.username} - {self.get_tipo_usuario_display()}'
 
 class Mesero(models.Model):
     nombre = models.CharField(max_length=60)
@@ -43,4 +57,5 @@ class Orden(models.Model):
     precio_total = models.IntegerField()
     
 class Mesa(models.Model):
+    numero_mesa = models.IntegerField(default=0)
     num_orden = models.ForeignKey(Orden,on_delete=models.CASCADE)
