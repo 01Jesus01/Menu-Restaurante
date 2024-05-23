@@ -84,29 +84,21 @@ def show_administrador(request):
 
 @login_required
 def show_cocina(request):
-    # Obtén todas las Platillos guardadas
-    platillos = Menu.objects.all()
-    
-    # Verifica si se está realizando una búsqueda
-    if 'q' in request.GET:
-        query = request.GET.get('q')
-        try:
-            platillo = Menu.objects.get(Nombre__iexact=query)
-            resultados = [{'Platillo': platillo.Nombre, 'Categoria': platillo.categoria}]
-            return JsonResponse(resultados, safe=False)
-        except Menu.DoesNotExist:
-            # Handle the case when no matching Menu object is found
-            resultados = [{'Platillo': 'No se encontraron resultados'}]
-            return JsonResponse(resultados, safe=False)
-    
-    # Si no hay búsqueda, renderiza la plantilla con todas las platillos
-    return render(request, 'Menu/cocina.html', {'platillos': platillos})
+    meseros = Mesero.objects.all()
+    ordenes = Orden.objects.all()
+    mesa = Mesa.objects.order_by('numero_mesa') 
+    contexto = {
+        'Mesero': meseros,
+        'Orden': ordenes,
+        'Mesa':mesa,
+    }
+    return render(request, 'Menu/cocina.html', contexto)
 
 @login_required
 def show_mesero(request):
     meseros = Mesero.objects.all()
     ordenes = Orden.objects.all()
-    mesa = Mesa.objects.all()
+    mesa = Mesa.objects.order_by('numero_mesa') 
     contexto = {
         'Mesero': meseros,
         'Orden': ordenes,

@@ -10,11 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="icon" href="{% static 'images/logo.png' %}">
-    <title>HeroSound</title>
+    <title>Restaurante de Don Jerry</title>
 </head>
-
 <body>
     <nav class="navbar navbar-custom navbar-expand-lg">
         <div class="container-fluid">
@@ -22,56 +21,55 @@
 
             <div class="navbar-brand-container">
                 <img src="{% static 'images/logo.png' %}" alt="logo" width="90rem">
-                <a class="navbar-brand" href=" ">Restaurante de Don Juan</a>
+                <a class="navbar-brand" href=" ">Tortas Jerry</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Platillos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Menu/cargar_catalogo/">Agregar Platillos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="/Menu/base_menu/" tabindex="-1" aria-disabled="true">Lista</a>
-                    </li>
-                </ul>
-            </div>
+          
         </div>
     </nav>
 
+    
 
     <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
     <div class="container">
-        {% if Orden %}
+        {% if Mesa %}
         <table class="table">
             <thead>
-                <th>Mesero</th>
-                <th>Platillo</th>
-                <th>Comentario</th>
-                <th>Mesa</th>
+                <tr>
+                    <th>Mesero</th>
+                    <th>Platillo</th>
+                    <th>Imagen</th>
+                    <th>Mesa</th>
+                    <th>Entregado</th> 
+                </tr>
             </thead>
             <tbody>
                 {% for mesa in Mesa %}
+                {% if mesa.num_orden.estado == True %}
                 <tr>
-                    <td>{{mesa.num_orden.id_mesero.nombre}}</td>
+                    <td>{{mesa.num_orden.id_mesero.nombre}} </td>
                     <td>{{mesa.num_orden.id_platillo.Nombre}}</td>
-                    <td>{{mesa.num_orden.comentario}}</td>
+                    <td><img class="img" src="{{ mesa.num_orden.id_platillo.imagen.url }}" alt="imagen" width="200rem" height="100rem" style="margin: auto;"></td>
                     <td>{{mesa.numero_mesa}}</td>
+                    <td class="checkbox-cell">
+                        <!-- Agregar un evento onclick al checkbox para llamar a la función eliminarPedido() -->
+                        <input type="checkbox" name="entregado" value="entregado" data-mesa-id="{{ mesa.id }}" onclick="eliminarPedido('{{ mesa.id }}')">
+                    </td>
                 </tr>
+                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p>No se encontro ninguna cancion</p>
+        <p>No se encontrÃ³ ninguna Orden</p>
         {% endif %}
     </div>
-
     
+
+   
 
 
 
@@ -108,7 +106,7 @@
         </div>
 
     </footer>
-
+    <script src="{% static 'js/check_box.js' %}"></script>
 </body>
 
 </html>
