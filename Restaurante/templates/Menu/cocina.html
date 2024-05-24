@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style_mes_coci.css' %}" />
     <link rel="icon" href="{% static 'images/logo.png' %}">
     <title>Restaurante de Don Jerry</title>
 </head>
@@ -32,8 +32,11 @@
     </nav>
 
     
-
-    <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
+    <h1>Orden de platillos</h1>
+    <div id="orden-container">
+        <!-- Aquí se mostrarán los datos de la orden -->
+    </div>
+    <!-- <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
     <div class="container">
         {% if Mesa %}
         <table class="table">
@@ -59,7 +62,7 @@
         {% else %}
         <p>No se encontrÃ³ ninguna Orden</p>
         {% endif %}
-    </div>
+    </div> -->
     
 
    
@@ -100,6 +103,33 @@
 
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hacer una solicitud AJAX para obtener los datos de la orden desde Django
+            $.ajax({
+                url: '/obtener_orden/',  // Esta es la URL de la vista que creamos en Django
+                method: 'GET',
+                success: function (data) {
+                    // Manejar la respuesta exitosa
+                    // Puedes agregar los datos al DOM aquí, por ejemplo:
+                    // data contiene los datos de la orden devueltos por la vista
+                    // Puedes acceder a los platillos como data.platillos y mostrarlos en la interfaz de usuario
+                    const ordenContainer = document.getElementById('orden-container');
+                    ordenContainer.innerHTML = `
+                        <p>Mesero: ${data.mesero}</p>
+                        <ul>
+                            ${data.platillos.map(platillo => `<li>${platillo.nombre}: $${platillo.precio}</li>`).join('')}
+                        </ul>
+                        <p>Total: $${data.total}</p>
+                    `;
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores
+                    console.error(error);
+                }
+            });
+        });
+    </script>  
 </body>
 
 </html>

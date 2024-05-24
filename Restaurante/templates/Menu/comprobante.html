@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/categorias.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/cate.css' %}" />
     <link rel="icon" href="{% static 'images/logo.png' %}">
     <title>Tortas Jerry</title>
 </head>
@@ -45,10 +45,39 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div>
+                <div id="reciboCompra">
+                    <h4 style="text-align: center;">Recibo de Compra</h4><br>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Descuento</th>
+                                <th>Precio Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reciboDetalles">
+                            <!-- Aquí se mostrarán los detalles del recibo -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Subtotal</th>
+                                <th id="subtotal">$0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">IVA (16%)</th>
+                                <th id="iva">$0.00</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th id="total">$0.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div><br><br><br>
+                <div class="mt-4">
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
                 </div>
-                <button id="insertarValoresBtn">Insertar Valores en Orden</button>
             </div>
         </div>
     </div>
@@ -58,14 +87,25 @@
             <div class="row">
                 <div class="col-sm-4 col-lg-4 text-light text-center">
                     <p>Síguenos en:</p>
-                    <!-- Agregué los enlaces de redes sociales -->
+                    <a href="https://www.instagram.com/"><img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://www.facebook.com/?locale=es_LA"><img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
+                            height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://twitter.com/?lang=es"><img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <p>@tHero Sounds</p>
                 </div>
                 <div class="col-sm-3 col-lg-4 text-light text-center">
                     &copy; 2024 @WebHeros. Todos los derechos reservados.
                 </div>
                 <div class="col-sm-5 col-lg-4 text-center">
                     <p>Contáctanos por:</p>
-                    <!-- Agregué los detalles de contacto -->
+                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        HeroSounds@gmail.com</a></br>
+                    <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        +52-614-285-89-17</a>
                 </div>
             </div>
         </div>
@@ -75,14 +115,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             const listaPlatillos = document.getElementById('listaPlatillos');
             const totalOrden = document.getElementById('totalOrden');
+            const reciboDetalles = document.getElementById('reciboDetalles');
+            const subtotalEl = document.getElementById('subtotal');
+            const ivaEl = document.getElementById('iva');
+            const totalEl = document.getElementById('total');
 
             let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
 
             function renderPlatillos() {
                 listaPlatillos.innerHTML = '';
+                reciboDetalles.innerHTML = '';
                 let subtotal = 0;
+                let total = 0;
                 platillos.forEach((platillo, index) => {
-                    subtotal += platillo.precio;
+                    let precioFinal = platillo.precio - (platillo.precio * (platillo.descuento / 100));
+                    subtotal += precioFinal;
+                    total += precioFinal;
 
                     let platilloDiv = document.createElement('div');
                     platilloDiv.className = 'col-md-4';
@@ -98,9 +146,24 @@
                         </div>
                     `;
                     listaPlatillos.appendChild(platilloDiv);
+
+                    let reciboRow = document.createElement('tr');
+                    reciboRow.innerHTML = `
+                        <td>${platillo.nombre}</td>
+                        <td>$${platillo.precio.toFixed(2)}</td>
+                        <td>${platillo.descuento}%</td>
+                        <td>$${precioFinal.toFixed(2)}</td>
+                    `;
+                    reciboDetalles.appendChild(reciboRow);
                 });
 
-                totalOrden.textContent = subtotal.toFixed(2);
+                let iva = subtotal * 0.16;
+                let totalConIva = subtotal + iva;
+
+                subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+                ivaEl.textContent = `$${iva.toFixed(2)}`;
+                totalEl.textContent = `$${totalConIva.toFixed(2)}`;
+                totalOrden.textContent = totalConIva.toFixed(2);
             }
 
             window.borrarPlatillo = function(index) {
@@ -110,51 +173,6 @@
             };
 
             renderPlatillos();
-        });
-
-        // function enviarOrden() {
-        //     const platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-        //     const comentario = document.querySelector('input[name="comentario"]').value;
-        //     const id_mesero = document.querySelector('input[name="id_mesero"]').value;
-
-        //     fetch('{% url "crear_orden" %}', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'X-CSRFToken': '{{ csrf_token }}'
-        //         },
-        //         body: JSON.stringify({ id_mesero, platillos, comentario })
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data.message) {
-        //             alert(data.message);
-        //             localStorage.removeItem('platillos');
-        //             // Redirige o actualiza la página
-        //         } else {
-        //             alert(data.error);
-        //         }
-        //     })
-        //     .catch(error => console.error('Error:', error));
-        // }
-    </script>
-    <script>
-        document.getElementById('insertarValoresBtn').addEventListener('click', function() {
-            fetch('/ruta/a/insertar_valores_orden/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de tener esto si estás usando CSRF
-                },
-                // Puedes enviar datos adicionales en el cuerpo de la solicitud si es necesario
-                // body: JSON.stringify({ ... })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Maneja la respuesta como desees
-                alert(data.message); // Muestra un mensaje de éxito o error
-            })
-            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
