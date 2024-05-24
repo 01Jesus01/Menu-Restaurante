@@ -1,6 +1,6 @@
 from django.urls import path
 from Menu import views
-from .views import base, index, load_menu, busqueda,show_administrador,show_cocina,show_mesero,show_cliente,show_orden, registro, login_view, show_categoria, show_orden2, crear_orden
+from .views import base, index, load_menu, busqueda,show_administrador,show_cocina,show_mesero,show_cliente,show_orden, registro, login_view, show_categoria, show_orden2, crear_orden, update_order_status
 from .views import insertar_valores_orden
 
 urlpatterns = [
@@ -19,4 +19,5 @@ urlpatterns = [
     path('comprobante/', views.show_orden2, name='comprobante'),
     path('crear_orden/', views.crear_orden, name='crear_orden'),
     path('insertar_valores_orden/', views.insertar_valores_orden, name='insertar_valores_orden'),
+    path('update_order_status/', update_order_status, name='update_order_status'),
 ]

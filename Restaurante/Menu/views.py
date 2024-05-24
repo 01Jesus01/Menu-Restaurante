@@ -119,7 +119,7 @@ def show_cocina(request):
 def show_mesero(request):
     meseros = Mesero.objects.all()
     ordenes = Orden.objects.all()
-    mesa = Mesa.objects.order_by('numero_mesa') 
+    mesa = Mesa.objects.all()
     contexto = {
         'Mesero': meseros,
         'Orden': ordenes,
@@ -302,3 +302,17 @@ def insertar_valores_orden(request):
         return JsonResponse({'message': 'Valores insertados correctamente en la tabla Orden'})
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+
+def update_order_status(request):
+    if request.method == 'POST':
+        mesa_id = request.POST.get('mesa_id')
+        try:
+            mesa = Mesa.objects.get(id=mesa_id)
+            orden = mesa.num_orden
+            orden.estado = False
+            orden.save()
+            return JsonResponse({'success': True})
+        except Mesa.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Mesa no encontrada'})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
