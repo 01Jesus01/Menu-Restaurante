@@ -24,8 +24,7 @@
             </div>
     
             <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar"
-                    id="inputBusqueda">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="inputBusqueda">
             </form>
             <div id="resultadoBusqueda" class="container_buscador">
                 <!-- Aquí se muestra el container no hay que poner nada aquí :)) -->
@@ -38,16 +37,26 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="Menu/cliente">Platillos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Menu/cargar_catalogo/">Categoria</a>
+                    <li class="nav-item dropdown"> <!-- Agregamos la clase dropdown al li -->
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categoría
+                        </a>
+                        <!-- Agrega estos enlaces en el menú desplegable -->
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'categoria' opcion=1 %}">Tortas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'categoria' opcion=2 %}">Hamburguesas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'categoria' opcion=3 %}">Bebidas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'categoria' opcion=4 %}">Snacks</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Menu/cliente/" tabindex="-1" aria-disabled="true">Lista</a>
+                        <a class="nav-link" href="/Menu/login/">Iniciar Sesion</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    
     
     <div class="titulo">
         <h3>Platillos Recientes</h3>
@@ -67,7 +76,7 @@
                         <!-- descuento -->
                         {{ platillo.Descuento }} %
                     </div>
-                    <img class="img" src="{{ platillo.imagen.url }}" alt="imagen" width="330rem">
+                    <img class="img" src="{{ platillo.imagen.url }}" alt="imagen">
                     <br>
                     <div class="texto">
                         <!-- Descripcion -->
@@ -134,7 +143,6 @@
             window.location.href = '{% url "orden" %}';
         }
     </script>
-    <script src="{% static 'js/btn_reproducir.js' %}"></script>
     <script src="{% static 'js/buscar.js' %}"></script>
 </body>
 
