@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/style_mes_coci.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="icon" href="{% static 'images/logo.png' %}">
     <title>Restaurante de Don Jerry</title>
 </head>
@@ -32,41 +32,37 @@
     </nav>
 
     
-    <h1>Orden de platillos</h1>
-    <div id="orden-container">
-        <!-- Aquí se mostrarán los datos de la orden -->
-    </div>
-    <!-- <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
-    <div class="container">
-        {% if Mesa %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Platillo</th>
-                    <th>Imagen</th>
-                    <th>Comentario</th>
-                    <th>Mesa</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mesa in Mesa %}
-                <tr>
-                    <td>{{mesa.num_orden.id_platillo.Nombre}}</td>
-                    <td><img class="img" src="{{ mesa.num_orden.id_platillo.imagen.url }}" alt="imagen" width="100rem" style="margin: auto;"></td>
-                    <td>{{mesa.num_orden.comentario}}</td>
-                    <td>{{mesa.numero_mesa}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No se encontrÃ³ ninguna Orden</p>
-        {% endif %}
-    </div> -->
     
+    <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
+    <div class="container">
+             {% if Mesa %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Platillo</th>
+                        <th>Imagen</th>
+                        <th>Descripcion</th>
+                     
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mesa in Mesa %} 
+                    {% if mesa.num_orden.estado ==  True %}
+                    <tr>
+                        <td>{{ mesa.num_orden.id_platillo.Nombre }}</td>
+                        <td><img class="img" src="{{ mesa.num_orden.id_platillo.imagen.url }}" alt="imagen" width="200rem" height="100rem" style="margin: auto;"></td>
+                        <td>{{ mesa.num_orden.comentario }}</td>
+                  
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
 
-   
-
+                </tbody>
+            </table>
+            {% else %}
+        <p>No se encontró ninguna Orden</p>
+            {% endif %}
+    </div>
 
 
     <footer class="mi-footer">
@@ -102,34 +98,33 @@
         </div>
 
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Hacer una solicitud AJAX para obtener los datos de la orden desde Django
-            $.ajax({
-                url: '/obtener_orden/',  // Esta es la URL de la vista que creamos en Django
-                method: 'GET',
-                success: function (data) {
-                    // Manejar la respuesta exitosa
-                    // Puedes agregar los datos al DOM aquí, por ejemplo:
-                    // data contiene los datos de la orden devueltos por la vista
-                    // Puedes acceder a los platillos como data.platillos y mostrarlos en la interfaz de usuario
-                    const ordenContainer = document.getElementById('orden-container');
-                    ordenContainer.innerHTML = `
-                        <p>Mesero: ${data.mesero}</p>
-                        <ul>
-                            ${data.platillos.map(platillo => `<li>${platillo.nombre}: $${platillo.precio}</li>`).join('')}
-                        </ul>
-                        <p>Total: $${data.total}</p>
-                    `;
-                },
-                error: function (xhr, status, error) {
-                    // Manejar errores
-                    console.error(error);
-                }
-            });
-        });
-    </script>  
 </body>
+<script>
+    function eliminarPedido(mesaId) {
+        fetch("{% url 'update_order_status' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: new URLSearchParams({
+                "mesa_id": mesaId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recargar la página para reflejar el cambio
+            } else {
+                alert("Error al actualizar el estado de la orden: " + (data.error || "desconocido"));
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar el estado de la orden:", error);
+            alert("Error al actualizar el estado de la orden.");
+        });
+    }
+
+</script>
 
 </html>
