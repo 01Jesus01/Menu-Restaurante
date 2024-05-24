@@ -229,3 +229,58 @@ footer, #reproductor {
     text-align: center;
     color: white;
 }
+
+/* CLIENTE */
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo1 {
+    font-size: 5rem;
+    color: #ffffff;
+}
+
+/* Estilo para el formulario de login */
+form {
+    padding: 4rem;
+    border: 1px solid #ddd;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Esto centrará los elementos hijos (incluido el botón) */
+}
+
+.btn_iniciar {
+    padding: 1rem 2rem; /* Asegura un buen tamaño de botón */
+    border-radius: 1.5rem;
+    color: white;
+    background-image: url('https://i.gifer.com/origin/65/65c6ed96a40bf5e00d4ac5a7a36845da_w200.gif'); 
+    margin-top: 1.5rem; /* Añade espacio entre el botón y los campos del formulario */
+}
+
+/* Ordenes */
+.card-img-top{
+    width: 18.35rem; /* Establecer el ancho fijo */
+    height: 13rem; /* Mantener la proporción de la imagen */
+}
+
+.card-text{
+    height: 1rem;
+    font-family: 'Franklin Gothic Demi'; 
+}
+
+.btn_cocinero {
+    padding: 1rem 2rem; /* Asegura un buen tamaño de botón */
+    border-radius: 1.5rem;
+    color: white;
+    background-image: url('https://i.gifer.com/origin/65/65c6ed96a40bf5e00d4ac5a7a36845da_w200.gif'); 
+    margin-top: 1.5rem; /* Añade espacio entre el botón y los campos del formulario */
+}

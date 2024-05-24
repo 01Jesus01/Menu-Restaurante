@@ -209,8 +209,10 @@ footer, #reproductor {
 }
 
 .img {
-    display: block; /* Para que la imagen no afecte la posición del precio */
-    margin-top: 20px; /* Espacio entre el precio y la imagen */
+    display: block;
+    margin-top: 20px;
+    width: 20.7rem; /* Establecer el ancho fijo */
+    height: 15rem; /* Mantener la proporción de la imagen */
 }
 
 .descuento {

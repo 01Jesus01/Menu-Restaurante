@@ -32,40 +32,42 @@
     </nav>
 
     
-
+    
     <h1 class="titulo_tabla">Orden de los platillos</h1><br><br>
     <div class="container">
-        {% if Mesa %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Mesero</th>
-                    <th>Platillo</th>
-                    <th>Imagen</th>
-                    <th>Mesa</th>
-                    <th>Entregado</th> 
-                </tr>
-            </thead>
-            <tbody>
-                {% for mesa in Mesa %}
-                {% if mesa.num_orden.estado == True %}
-                <tr>
-                    <td>{{mesa.num_orden.id_mesero.nombre}} </td>
-                    <td>{{mesa.num_orden.id_platillo.Nombre}}</td>
-                    <td><img class="img" src="{{ mesa.num_orden.id_platillo.imagen.url }}" alt="imagen" width="200rem" height="100rem" style="margin: auto;"></td>
-                    <td>{{mesa.numero_mesa}}</td>
-                    <td class="checkbox-cell">
-                        <!-- Agregar un evento onclick al checkbox para llamar a la función eliminarPedido() -->
-                        <input type="checkbox" name="entregado" value="entregado" data-mesa-id="{{ mesa.id }}" onclick="eliminarPedido('{{ mesa.id }}')">
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No se encontrÃ³ ninguna Orden</p>
-        {% endif %}
+        {% for nombre_mesero in Mesero %}
+        <h1>{{ nombre_mesero.nombre }}</h1>
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Platillo</th>
+                        <th>Imagen</th>
+                        <th>Mesa</th>
+                        <th>Entregado</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mesa in Mesa %}
+                    {% if mesa.num_orden.id_mesero == nombre_mesero %}
+                    {% if mesa.num_orden.estado ==  True %}
+                    <tr>
+                        <td>{{ mesa.num_orden.id_platillo.Nombre }}</td>
+                        <td><img class="img" src="{{ mesa.num_orden.id_platillo.imagen.url }}" alt="imagen" width="200rem" height="100rem" style="margin: auto;"></td>
+                        <td>{{ mesa.numero_mesa }}</td>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" name="entregado" value="entregado" data-mesa-id="{{ mesa.id }}" onclick="eliminarPedido('{{ mesa.id }}')">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        {% empty %}
+        <p>No se encontró ninguna Orden</p>
+        {% endfor %}
     </div>
     
 
@@ -106,7 +108,33 @@
         </div>
 
     </footer>
-    <script src="{% static 'js/check_box.js' %}"></script>
 </body>
+<script>
+    function eliminarPedido(mesaId) {
+        fetch("{% url 'update_order_status' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: new URLSearchParams({
+                "mesa_id": mesaId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recargar la página para reflejar el cambio
+            } else {
+                alert("Error al actualizar el estado de la orden: " + (data.error || "desconocido"));
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar el estado de la orden:", error);
+            alert("Error al actualizar el estado de la orden.");
+        });
+    }
+
+</script>
 
 </html>
