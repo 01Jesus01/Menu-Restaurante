@@ -57,4 +57,4 @@ class Orden(models.Model):
     
 class Mesa(models.Model):
     numero_mesa = models.IntegerField(default=0)
-    num_orden = models.ForeignKey(Orden,on_delete=models.CASCADE)
+    num_orden = models.ForeignKey('Orden', on_delete=models.CASCADE, null=True, blank=True)

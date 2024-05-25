@@ -11,7 +11,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <link rel="icon" href="{% static 'images/logo1.png' %}">
     <title>Restaurante de Don Jerry</title>
 </head>
 <body>
@@ -20,14 +20,31 @@
 
 
             <div class="navbar-brand-container">
-                <img src="{% static 'images/logo.png' %}" alt="logo" width="90rem">
-                <a class="navbar-brand" href=" ">Tortas Jerry</a>
+                <img src="{% static 'images/logo1.png' %}" alt="logo" width="75rem" height="64rem">
+                <a class="navbar-brand" href="/">Tortas Jerry</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-          
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link" style="padding: 0.5rem; width: 12rem;">Bienvenido, {{ user.username}}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"
+                            style="padding: 0.5rem; border: none; background-color: red; color: white;">Cerrar Sesión</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Menu/login/"
+                            style="padding: 0.5rem; border: none; background-color: blue; color: white;">Iniciar Sesion</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
 
