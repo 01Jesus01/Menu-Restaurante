@@ -1,4 +1,4 @@
-
+resultadoBusqueda.style.display = "none";
 
 inputBusqueda.addEventListener('input', function () {
     const query = inputBusqueda.value.trim();
@@ -27,18 +27,16 @@ function mostrarResultados(data) {
         data.forEach(platillo => {
             const elementoPlatillo = document.createElement('div');
             const enlacePlatillo = document.createElement('a');
-            enlacePlatillo.textContent = `${platillo.Nombre}`; // Ajustado aquí
-            // Adjuntar el valor de query al enlace como un atributo de datos
-            enlacePlatillo.dataset.query = query; // No es necesario, pero si deseas puedes eliminar esta línea
+            enlacePlatillo.textContent = `${platillo.Nombre}`;
+            enlacePlatillo.dataset.query = query;
             enlacePlatillo.addEventListener('click', function() {
                 // Obtener el valor de query del enlace al que se hizo clic
-                const clickedQuery = this.dataset.query; // No es necesario, pero si deseas puedes eliminar esta línea
+                const clickedQuery = this.dataset.query;
                 window.location.href = `/Menu/busqueda/?q=${platillo.Nombre}`;
-                console.log("Nombre del platillo:", platillo.Nombre);                
+                console.log("Nombre del platillo:", platillo.Nombre);                 
             });
             elementoPlatillo.appendChild(enlacePlatillo);
             resultadoBusqueda.appendChild(elementoPlatillo);
         });
     }
 }
-

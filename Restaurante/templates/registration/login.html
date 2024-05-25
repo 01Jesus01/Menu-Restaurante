@@ -10,16 +10,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/estilo_cliente2.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/cliente2.css' %}" />
     <link rel="icon" href="{% static 'images/logo.png' %}">
     <title>Tortas Jerry</title>
 </head>
 <body>
-    <h2 class="titulo1">Iniciar Sesion</h2><br>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn_iniciar">Ingresar</button>
-    </form>
+    <div class="container">
+        <h2 class="titulo1">Iniciar Sesion</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="mb-3">
+                {{ form.username.label_tag }} {{ form.username }}
+            </div>
+            <div class="mb-3">
+                {{ form.password.label_tag }} {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-primary">Iniciar</button>
+        </form>        
+    </div>
 </body>
 </html>
