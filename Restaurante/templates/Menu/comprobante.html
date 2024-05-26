@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div id="reciboCompra">
+                <div id="reciboCompra" class="d-none">
                     <h4 style="text-align: center;">Recibo de Compra</h4><br>
                     <table class="table">
                         <thead>
@@ -78,6 +78,52 @@
                 <div class="mt-4">
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
                 </div>
+                <button id="insertarValoresBtn" class="btn btn-primary">Insertar Valores en Orden</button>
+                <button id="pagarBtn" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#pagoModal">Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pago -->
+    <div class="modal fade" id="pagoModal" tabindex="-1" aria-labelledby="pagoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pagoModalLabel">Método de Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="metodoPago" id="tarjeta" value="tarjeta">
+                        <label class="form-check-label" for="tarjeta">
+                            Tarjeta de Crédito/Débito
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="metodoPago" id="efectivo" value="efectivo">
+                        <label class="form-check-label" for="efectivo">
+                            Pago en Efectivo
+                        </label>
+                    </div>
+                    <div id="tarjetaInfo" class="mt-3 d-none">
+                        <div class="mb-3">
+                            <label for="numeroTarjeta" class="form-label">Número de Tarjeta</label>
+                            <input type="text" class="form-control" id="numeroTarjeta">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaExpiracion" class="form-label">Fecha de Expiración</label>
+                            <input type="text" class="form-control" id="fechaExpiracion">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmarPagoBtn">Confirmar Pago</button>
+                </div>
             </div>
         </div>
     </div>
@@ -87,25 +133,14 @@
             <div class="row">
                 <div class="col-sm-4 col-lg-4 text-light text-center">
                     <p>Síguenos en:</p>
-                    <a href="https://www.instagram.com/"><img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://www.facebook.com/?locale=es_LA"><img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
-                            height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://twitter.com/?lang=es"><img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <p>@tHero Sounds</p>
+                    <!-- Agregué los enlaces de redes sociales -->
                 </div>
                 <div class="col-sm-3 col-lg-4 text-light text-center">
                     &copy; 2024 @WebHeros. Todos los derechos reservados.
                 </div>
                 <div class="col-sm-5 col-lg-4 text-center">
                     <p>Contáctanos por:</p>
-                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        HeroSounds@gmail.com</a></br>
-                    <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        +52-614-285-89-17</a>
+                    <!-- Agregué los detalles de contacto -->
                 </div>
             </div>
         </div>
@@ -115,22 +150,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             const listaPlatillos = document.getElementById('listaPlatillos');
             const totalOrden = document.getElementById('totalOrden');
+            const reciboCompra = document.getElementById('reciboCompra');
             const reciboDetalles = document.getElementById('reciboDetalles');
-            const subtotalEl = document.getElementById('subtotal');
-            const ivaEl = document.getElementById('iva');
-            const totalEl = document.getElementById('total');
+            const subtotalElem = document.getElementById('subtotal');
+            const ivaElem = document.getElementById('iva');
+            const totalElem = document.getElementById('total');
 
             let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
 
             function renderPlatillos() {
                 listaPlatillos.innerHTML = '';
-                reciboDetalles.innerHTML = '';
                 let subtotal = 0;
-                let total = 0;
                 platillos.forEach((platillo, index) => {
-                    let precioFinal = platillo.precio - (platillo.precio * (platillo.descuento / 100));
-                    subtotal += precioFinal;
-                    total += precioFinal;
+                    subtotal += platillo.precio;
 
                     let platilloDiv = document.createElement('div');
                     platilloDiv.className = 'col-md-4';
@@ -146,24 +178,9 @@
                         </div>
                     `;
                     listaPlatillos.appendChild(platilloDiv);
-
-                    let reciboRow = document.createElement('tr');
-                    reciboRow.innerHTML = `
-                        <td>${platillo.nombre}</td>
-                        <td>$${platillo.precio.toFixed(2)}</td>
-                        <td>${platillo.descuento}%</td>
-                        <td>$${precioFinal.toFixed(2)}</td>
-                    `;
-                    reciboDetalles.appendChild(reciboRow);
                 });
 
-                let iva = subtotal * 0.16;
-                let totalConIva = subtotal + iva;
-
-                subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-                ivaEl.textContent = `$${iva.toFixed(2)}`;
-                totalEl.textContent = `$${totalConIva.toFixed(2)}`;
-                totalOrden.textContent = totalConIva.toFixed(2);
+                totalOrden.textContent = subtotal.toFixed(2);
             }
 
             window.borrarPlatillo = function(index) {
@@ -173,6 +190,73 @@
             };
 
             renderPlatillos();
+
+            document.getElementById('insertarValoresBtn').addEventListener('click', function() {
+                reciboDetalles.innerHTML = '';
+                let subtotal = 0;
+
+                platillos.forEach(platillo => {
+                    let precioFinal = platillo.precio;
+                    subtotal += precioFinal;
+
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${platillo.nombre}</td>
+                        <td>$${platillo.precio.toFixed(2)}</td>
+                        <td>$0.00</td>
+                        <td>$${precioFinal.toFixed(2)}</td>
+                    `;
+                    reciboDetalles.appendChild(row);
+                });
+
+                let iva = subtotal * 0.16;
+                let total = subtotal + iva;
+
+                subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
+                ivaElem.textContent = `$${iva.toFixed(2)}`;
+                totalElem.textContent = `$${total.toFixed(2)}`;
+
+                reciboCompra.classList.remove('d-none');
+            });
+
+            document.querySelectorAll('input[name="metodoPago"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'tarjeta') {
+                        document.getElementById('tarjetaInfo').classList.remove('d-none');
+                    } else {
+                        document.getElementById('tarjetaInfo').classList.add('d-none');
+                    }
+                });
+            });
+
+            document.getElementById('confirmarPagoBtn').addEventListener('click', function() {
+                alert('¡Pago realizado con éxito!');
+                platillos = [];
+                localStorage.setItem('platillos', JSON.stringify(platillos));
+                renderPlatillos();
+                totalOrden.textContent = '0.00';
+                reciboCompra.classList.add('d-none');
+                pagoModal.hide();
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('insertarValoresBtn').addEventListener('click', function() {
+            fetch('/ruta/a/insertar_valores_orden/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de tener esto si estás usando CSRF
+                },
+                // Puedes enviar datos adicionales en el cuerpo de la solicitud si es necesario
+                // body: JSON.stringify({ ... })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Maneja la respuesta como desees
+                alert(data.message); // Muestra un mensaje de éxito o error
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
