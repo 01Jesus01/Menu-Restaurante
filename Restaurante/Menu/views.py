@@ -222,6 +222,7 @@ def login_view(request):
         form = CustomAuthenticationForm()
     return render(request, 'registration/login.html', {'form': form})
 
+
 def logout_view(request):
     if request.user.is_authenticated:
         auth_logout(request)
@@ -266,30 +267,30 @@ def show_categoria(request, opcion):
 
     return render(request, 'Menu/categoria.html', contexto)
 
-@csrf_exempt
-def crear_orden(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        id_mesero = data.get('id_mesero')
-        platillos = data.get('platillos')
-        comentario = data.get('comentario', '')
+#@csrf_exempt
+#def crear_orden(request):
+#    if request.method == "POST":
+#        data = json.loads(request.body)
+ #       id_mesero = data.get('id_mesero')
+#        platillos = data.get('platillos')
+ ##       comentario = data.get('comentario', '')
+#
+#        mesero = Mesero.objects.get(id=id_mesero)
 
-        mesero = Mesero.objects.get(id=id_mesero)
+ #       for platillo in platillos:
+ #           menu_item = Menu.objects.get(id=platillo['id'])
+#            cantidad = platillo['cantidad']
+ #           Orden.objects.create(
+  #              id_mesero=mesero,
+   #             id_platillo=menu_item,
+    #            cantidad=cantidad,
+     #           comentario=comentario,
+      #          estado=True
+       #     )
 
-        for platillo in platillos:
-            menu_item = Menu.objects.get(id=platillo['id'])
-            cantidad = platillo['cantidad']
-            Orden.objects.create(
-                id_mesero=mesero,
-                id_platillo=menu_item,
-                cantidad=cantidad,
-                comentario=comentario,
-                estado=True
-            )
+        #return JsonResponse({'message': 'Orden creada exitosamente'})
 
-        return JsonResponse({'message': 'Orden creada exitosamente'})
-
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+ #   return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 @csrf_exempt
 def insertar_valores_orden(request):
@@ -322,3 +323,19 @@ def update_order_status(request):
             return JsonResponse({'success': False, 'error': 'Mesa no encontrada'})
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
+@csrf_exempt
+def crear_orden(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        id_mesero = Mesero.objects.get(pk=1)  # Ajusta esto según tu lógica para obtener el mesero
+        for platillo in data['platillos']:
+            id_platillo = Menu.objects.get(Nombre=platillo['nombre'])  # Ajusta si 'Nombre' no es único
+            Orden.objects.create(
+                id_mesero=id_mesero,
+                id_platillo=id_platillo,
+                cantidad=1,  # Suponiendo que la cantidad viene del frontend o por defecto es 1
+                comentario=platillo.get('comentario', 'vdfvdfvdfvdfvdf'),  # Suponiendo que el comentario viene del frontend o por defecto es vacío
+                estado=True  # O ajusta según la lógica de tu aplicación
+            )
+        return JsonResponse({'message': 'Orden creada exitosamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

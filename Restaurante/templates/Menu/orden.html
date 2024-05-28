@@ -48,7 +48,7 @@
                 <div>
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
                 </div>
-                <button id="insertarValoresBtn">Insertar Valores en Orden</button>
+                <button id="enviarOrden">Insertar Valores en Orden</button>
             </div>
         </div>
     </div>
@@ -111,6 +111,33 @@
 
             renderPlatillos();
         });
+
+
+
+        function enviarOrden() {
+            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+
+            fetch('{% url "crear_orden" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ platillos: platillos })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    localStorage.removeItem('platillos');
+                    window.location.href = '{% url "orden" %}';
+                } else {
+                    alert('Error al crear la orden');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
 
         // function enviarOrden() {
         //     const platillos = JSON.parse(localStorage.getItem('platillos')) || [];
