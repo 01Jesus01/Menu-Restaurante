@@ -28,7 +28,7 @@ class Form_Comments(forms.ModelForm):
 class RegistroForm(forms.ModelForm):
     username = forms.CharField(label='Username', max_length=150, help_text='')
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
-    num_mesa = forms.IntegerField(label='Número de mesa', required=False)
+  
 
     class Meta:
         model = User
@@ -39,9 +39,7 @@ class RegistroForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            if self.cleaned_data.get('num_mesa'):
-                mesa = Mesa.objects.create(numero_mesa=self.cleaned_data['num_mesa'])
-                mesa.save()
+           
         return user
 
 class CustomAuthenticationForm(AuthenticationForm):

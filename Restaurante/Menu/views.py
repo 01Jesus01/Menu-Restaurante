@@ -337,13 +337,20 @@ def crear_orden(request):
             except Menu.DoesNotExist:
                 return JsonResponse({'error': f'Platillo {platillo["nombre"]} no encontrado'}, status=400)
             
-            Orden.objects.create(
+            orden = Orden.objects.create(
                 id_mesero=id_mesero,
                 id_platillo=id_platillo,
                 cantidad=platillo.get('cantidad', 1),  # Suponiendo que la cantidad viene del frontend o por defecto es 1
                 comentario=platillo.get('comentario', ''),  # Suponiendo que el comentario viene del frontend o por defecto es vacío
                 estado=True  # O ajusta según la lógica de tu aplicación
             )
+            
+            # Crear una mesa y asignarle el número de la orden
+            num_mesa = int(platillo.get('numMesa',1)) # Obtener el número de mesa del objeto platillo
+            mesa = Mesa.objects.create(
+                 numero_mesa=num_mesa,
+                 num_orden=orden  # Asignar la orden creada a la mesa
+            )
+            
         return JsonResponse({'message': 'Orden creada exitosamente'})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
-
