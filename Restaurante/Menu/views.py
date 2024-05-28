@@ -327,15 +327,23 @@ def update_order_status(request):
 def crear_orden(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        id_mesero = Mesero.objects.get(pk=1)  # Ajusta esto según tu lógica para obtener el mesero
+        id_mesero = Mesero.objects.order_by('?').first()  # Selecciona aleatoriamente un mesero
+        if not id_mesero:
+            return JsonResponse({'error': 'No hay meseros disponibles'}, status=400)
+        
         for platillo in data['platillos']:
-            id_platillo = Menu.objects.get(Nombre=platillo['nombre'])  # Ajusta si 'Nombre' no es único
+            try:
+                id_platillo = Menu.objects.get(Nombre=platillo['nombre'])  # Ajusta si 'Nombre' no es único
+            except Menu.DoesNotExist:
+                return JsonResponse({'error': f'Platillo {platillo["nombre"]} no encontrado'}, status=400)
+            
             Orden.objects.create(
                 id_mesero=id_mesero,
                 id_platillo=id_platillo,
-                cantidad=1,  # Suponiendo que la cantidad viene del frontend o por defecto es 1
-                comentario=platillo.get('comentario', 'vdfvdfvdfvdfvdf'),  # Suponiendo que el comentario viene del frontend o por defecto es vacío
+                cantidad=platillo.get('cantidad', 1),  # Suponiendo que la cantidad viene del frontend o por defecto es 1
+                comentario=platillo.get('comentario', ''),  # Suponiendo que el comentario viene del frontend o por defecto es vacío
                 estado=True  # O ajusta según la lógica de tu aplicación
             )
         return JsonResponse({'message': 'Orden creada exitosamente'})
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+

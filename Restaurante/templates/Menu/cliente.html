@@ -73,6 +73,13 @@
     <div class="titulo">
         <h3>Platillos Recientes</h3>
     </div>
+     <!-- Botón para enviar la orden -->
+     <div style="text-align: center; margin-top: 20px;">
+        <button  class="btn btn-primary"  href="/Menu/orden/" >
+            <a class="nav-link" href="/Menu/orden/">Ver tus ordenes</a>
+        </button>
+    </div>
+
     <br><br>
     <div class="container">
         <div class="row">
@@ -118,10 +125,7 @@
         </div>
     </div>
 
-     <!-- Botón para enviar la orden -->
-     <div style="text-align: center; margin-top: 20px;">
-        <button onclick="enviarOrden()" class="btn btn-primary">Enviar Orden</button>
-    </div>
+    
 
     <footer class="mi-footer">
         <div class="container py-5">
@@ -159,32 +163,9 @@
                 let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
                 platillos.push({ nombre, descripcion, imagenUrl, precio: parseFloat(precio), descuento: parseFloat(descuento), cantidad: 1, comentario: '' });  // Puedes ajustar esto para incluir cantidad y comentario si es necesario
                 localStorage.setItem('platillos', JSON.stringify(platillos));
-                alert('Platillo agregado al pedido');
+                alert('Platillo agregado a la orden');
             }
         
-            function enviarOrden() {
-                let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-        
-                fetch('{% url "crear_orden" %}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({ platillos: platillos })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message);
-                        localStorage.removeItem('platillos');
-                        window.location.href = '{% url "orden" %}';
-                    } else {
-                        alert('Error al crear la orden');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
             
         </script>
 

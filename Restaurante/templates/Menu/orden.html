@@ -47,8 +47,11 @@
             <div class="col-md-4">
                 <div>
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="enviarOrden()" class="btn btn-primary">Enviar Orden</button>
+                    </div>
                 </div>
-                <button id="enviarOrden">Insertar Valores en Orden</button>
             </div>
         </div>
     </div>
@@ -93,6 +96,7 @@
                                 <h5 class="card-title">${platillo.nombre}</h5>
                                 <p class="card-text">${platillo.descripcion}</p><br>
                                 <p class="card-text">Precio: $${platillo.precio}</p>
+                                <textarea id="comentario_${index}" placeholder="Escribe un comentario"></textarea>
                                 <button class="btn btn-danger" onclick="borrarPlatillo(${index})">Borrar</button>
                             </div>
                         </div>
@@ -112,10 +116,14 @@
             renderPlatillos();
         });
 
-
-
         function enviarOrden() {
             let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+
+            // Capturar comentarios de cada platillo
+            platillos = platillos.map((platillo, index) => {
+                const comentario = document.getElementById(`comentario_${index}`).value;
+                return { ...platillo, comentario };
+            });
 
             fetch('{% url "crear_orden" %}', {
                 method: 'POST',
@@ -137,52 +145,6 @@
             })
             .catch(error => console.error('Error:', error));
         }
-
-
-        // function enviarOrden() {
-        //     const platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-        //     const comentario = document.querySelector('input[name="comentario"]').value;
-        //     const id_mesero = document.querySelector('input[name="id_mesero"]').value;
-
-        //     fetch('{% url "crear_orden" %}', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'X-CSRFToken': '{{ csrf_token }}'
-        //         },
-        //         body: JSON.stringify({ id_mesero, platillos, comentario })
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data.message) {
-        //             alert(data.message);
-        //             localStorage.removeItem('platillos');
-        //             // Redirige o actualiza la página
-        //         } else {
-        //             alert(data.error);
-        //         }
-        //     })
-        //     .catch(error => console.error('Error:', error));
-        // }
-    </script>
-    <script>
-        document.getElementById('insertarValoresBtn').addEventListener('click', function() {
-            fetch('/ruta/a/insertar_valores_orden/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}' // Asegúrate de tener esto si estás usando CSRF
-                },
-                // Puedes enviar datos adicionales en el cuerpo de la solicitud si es necesario
-                // body: JSON.stringify({ ... })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Maneja la respuesta como desees
-                alert(data.message); // Muestra un mensaje de éxito o error
-            })
-            .catch(error => console.error('Error:', error));
-        });
     </script>
 </body>
 
