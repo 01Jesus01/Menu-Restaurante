@@ -321,3 +321,4 @@ def update_order_status(request):
         except Mesa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Mesa no encontrada'})
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
+

@@ -22,14 +22,14 @@ class Mesero(models.Model):
     rfc = models.CharField(max_length=100)
     
       #Representar el registro como cadena de texto
-    def _str_(self):
+    def __str__(self):
         return self.nombre
 
 class Categoria_platillo(models.Model):
     nombre_categoria= models.CharField(max_length=60)
 
     #Representar el registro como cadena de texto
-    def _str_(self):
+    def __str__(self):
         return self.nombre_categoria
     
 
@@ -37,14 +37,14 @@ class Categoria_platillo(models.Model):
 class Menu(models.Model):
     Nombre = models.CharField(max_length=100)
     Descripcion = models.CharField(max_length=300)
-    Precio = models.IntegerField()
+    Precio = models.IntegerField(default=100)
     categoria = models.ForeignKey(Categoria_platillo,on_delete=models.CASCADE)
     Descuento = models.IntegerField(default=0) 
     imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
     
     
     #Representar el registro como cadena de texto
-    def _str_(self):
+    def __str__(self):
         return self.Nombre
     
 
