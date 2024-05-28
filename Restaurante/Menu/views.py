@@ -328,29 +328,35 @@ def crear_orden(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         id_mesero = Mesero.objects.order_by('?').first()  # Selecciona aleatoriamente un mesero
+
         if not id_mesero:
             return JsonResponse({'error': 'No hay meseros disponibles'}, status=400)
-        
-        for platillo in data['platillos']:
+
+        numero_mesa = data.get('numero_mesa', None)
+
+        if not numero_mesa:
+            return JsonResponse({'error': 'Número de mesa no especificado'}, status=400)
+
+        for platillo_data in data.get('platillos', []):
             try:
-                id_platillo = Menu.objects.get(Nombre=platillo['nombre'])  # Ajusta si 'Nombre' no es único
+                id_platillo = Menu.objects.get(Nombre=platillo_data['nombre'])  # Ajusta si 'Nombre' no es único
             except Menu.DoesNotExist:
-                return JsonResponse({'error': f'Platillo {platillo["nombre"]} no encontrado'}, status=400)
-            
+                return JsonResponse({'error': f'Platillo {platillo_data["nombre"]} no encontrado'}, status=400)
+
+            # Crear la orden
             orden = Orden.objects.create(
                 id_mesero=id_mesero,
                 id_platillo=id_platillo,
-                cantidad=platillo.get('cantidad', 1),  # Suponiendo que la cantidad viene del frontend o por defecto es 1
-                comentario=platillo.get('comentario', ''),  # Suponiendo que el comentario viene del frontend o por defecto es vacío
-                estado=True  # O ajusta según la lógica de tu aplicación
+                cantidad=platillo_data.get('cantidad', 1),
+                comentario=platillo_data.get('comentario', ''),
+                estado=True
             )
-            
-            # Crear una mesa y asignarle el número de la orden
-            num_mesa = int(platillo.get('numMesa',1)) # Obtener el número de mesa del objeto platillo
-            mesa = Mesa.objects.create(
-                 numero_mesa=num_mesa,
-                 num_orden=orden  # Asignar la orden creada a la mesa
+
+            # Crear una mesa para la orden
+            Mesa.objects.create(
+                numero_mesa=numero_mesa,
+                num_orden=orden
             )
-            
-        return JsonResponse({'message': 'Orden creada exitosamente'})
+
+        return JsonResponse({'message': 'Órdenes y mesas creadas exitosamente'})
     return JsonResponse({'error': 'Método no permitido'}, status=405)

@@ -51,8 +51,10 @@
                     <div style="text-align: center; margin-top: 20px;">
                         <button onclick="enviarOrden()" class="btn btn-primary">Enviar Orden</button>
                     </div>
+                    <label for="cantidad">Numero de mesa</label>
+                    <input type="number" id="numeroMesa" name="numeroMesa" min="1">
                 </div>
-               
+                
             </div>
         </div>
     </div>
@@ -118,34 +120,36 @@
         });
 
         function enviarOrden() {
-            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+    let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+    let numeroMesa = document.getElementById('numeroMesa').value; // Obtener el número de mesa
 
-            // Capturar comentarios de cada platillo
-            platillos = platillos.map((platillo, index) => {
-                const comentario = document.getElementById(`comentario_${index}`).value;
-                return { ...platillo, comentario };
-            });
+    // Capturar comentarios de cada platillo
+    platillos = platillos.map((platillo, index) => {
+        const comentario = document.getElementById(`comentario_${index}`).value;
+        return { ...platillo, comentario };
+    });
 
-            fetch('{% url "crear_orden" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ platillos: platillos })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message);
-                    localStorage.removeItem('platillos');
-                    window.location.href = '{% url "orden" %}';
-                } else {
-                    alert('Error al crear la orden');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+    fetch('{% url "crear_orden" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ platillos: platillos, numero_mesa: numeroMesa }) // Incluir el número de mesa
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+            localStorage.removeItem('platillos');
+            window.location.href = '{% url "orden" %}';
+        } else {
+            alert('Error al crear la orden');
         }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
     </script>
 </body>
 
