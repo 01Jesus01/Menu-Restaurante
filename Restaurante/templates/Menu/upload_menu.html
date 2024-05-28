@@ -48,40 +48,30 @@
         <br>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ formulario.as_p }}
-            <button type="submit">Agregar Platillos</button>
+            <div class="form-group">
+                <label for="{{ formulario.Nombre.id_for_label }}">Nombre:</label>
+                {{ formulario.Nombre }}
+            </div>
+            <div class="form-group">
+                <label for="{{ formulario.Descripcion.id_for_label }}">Descripción:</label>
+                {{ formulario.Descripcion }}
+            </div>
+            <div class="form-group">
+                <label for="{{ formulario.Precio.id_for_label }}">Precio:</label>
+                {{ formulario.Precio }}
+            </div>
+            <div class="form-group">
+                <label for="{{ formulario.categoria.id_for_label }}">Categoría:</label>
+                {{ formulario.categoria }}
+            </div>
+            <div class="form-group">
+                <label for="{{ formulario.imagen.id_for_label }}">Imagen:</label>
+                {{ formulario.imagen }}
+            </div>
+            <button type="submit">Agregar Platillo</button>
         </form>
     </div>
     <br><br>
-    <footer class="mi-footer">
-        <div class="container py-5"> <!-- Cambiamos py-4 por py-5 para aumentar la altura -->
-            <div class="row">
-                <div class="col-sm-4 col-lg-4 text-light text-center">
-                    <p>Siguenos en:</p>
-                    <a href="https://www.instagram.com/"> <img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://www.facebook.com/?locale=es_LA"> <img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
-                            height="30" class="d-inline-block align-text-top"></a>
-                    <a href="https://twitter.com/?lang=es"> <img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
-                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
-                    <p>@tHero Sounds</p>
-                </div>
-                <div class="col-sm-3 col-lg-4 text-light text-center">
-                    &copy; 2024 @WebHeros. Todos los derechos reservados.
-                </div>
-                <div class="col-sm-5 col-lg-4 text-center">
-                    <p>Contactanos por: </p>
-                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        HeroSounds@gmail.com</a></br>
-                    <a class="link-1"> <img
-                            src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
-                            width="15" height="15" class="d-inline-block align-text-top">
-                        +52-614-285-89-17</a>
-                </div>
-            </div>
-        </div>
-        
-    </footer>
+    
 </body>
 </html>
