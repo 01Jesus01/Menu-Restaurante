@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from Menu import views
 from .views import base, index, load_menu, busqueda,show_administrador,show_cocina,show_mesero,show_cliente,show_orden, registro, login_view, show_categoria, show_orden2, crear_orden, update_order_status
-from .views import insertar_valores_orden, logout_view
+from .views import insertar_valores_orden, logout_view,crear_orden
 
 urlpatterns = [
     path('', views.show_cliente, name='cliente'),
@@ -25,5 +25,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('registro/', views.registro, name='registro'),
-   
+
 ]

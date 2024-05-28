@@ -70,8 +70,6 @@
         </div>
     </nav>
     
-    
-    
     <div class="titulo">
         <h3>Platillos Recientes</h3>
     </div>
@@ -120,6 +118,11 @@
         </div>
     </div>
 
+     <!-- Botón para enviar la orden -->
+     <div style="text-align: center; margin-top: 20px;">
+        <button onclick="enviarOrden()" class="btn btn-primary">Enviar Orden</button>
+    </div>
+
     <footer class="mi-footer">
         <div class="container py-5">
             <div class="row">
@@ -143,36 +146,50 @@
                         HeroSounds@gmail.com</a></br>
                     <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
                             width="15" height="15" class="d-inline-block align-text-top">
-                        +52-614-285-89-17</a>
+                        33 1234 4567</a></br>
                 </div>
             </div>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-2wWbq0mJSnoW/RX3r5e+OcRpKRuDjjt0myTm2tQ0d+lPBJ4TSYPJXw5QXOmG9B38"
+        crossorigin="anonymous"></script>
+        <script>
+            function agregarPlatillo(nombre, descripcion, imagenUrl, precio, descuento) {
+                let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+                platillos.push({ nombre, descripcion, imagenUrl, precio: parseFloat(precio), descuento: parseFloat(descuento), cantidad: 1, comentario: '' });  // Puedes ajustar esto para incluir cantidad y comentario si es necesario
+                localStorage.setItem('platillos', JSON.stringify(platillos));
+                alert('Platillo agregado al pedido');
+            }
+        
+            function enviarOrden() {
+                let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+        
+                fetch('{% url "crear_orden" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ platillos: platillos })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        localStorage.removeItem('platillos');
+                        window.location.href = '{% url "orden" %}';
+                    } else {
+                        alert('Error al crear la orden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+            
+        </script>
 
-    <script>
-        function agregarPlatillo(nombre, descripcion, imagenUrl, precio, descuento) {
-            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
-            platillos.push({ nombre, descripcion, imagenUrl, precio: parseFloat(precio), descuento: parseFloat(descuento) });
-            localStorage.setItem('platillos', JSON.stringify(platillos));
-            window.location.href = '{% url "orden" %}';
-        }
-    </script>
-    <!-- <script>
-        document.getElementById('logout-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita el envío del formulario por defecto
-            fetch('{% url "logout" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = '/'; // Redirige a la página principal
-                }
-            });
-        });
-    </script> -->
-    <script src="{% static 'js/buscar.js' %}"></script>
+   
+
 </body>
 
 </html>
