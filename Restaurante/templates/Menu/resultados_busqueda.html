@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylis.css' %}" />
     <link rel="icon" href="{% static 'images/logo1.png' %}">
     <title>Tortas Jerry</title>
 </head>
@@ -76,6 +76,12 @@
 
     <div class="titulo">
         <h3>Platillo Seleccionado</h3>
+    </div>
+    <!-- Botón para enviar la orden -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button  class="btn btn-primary"  href="/Menu/orden/" >
+            <a class="nav-link" href="/Menu/orden/">Ver tus ordenes</a>
+        </button>
     </div>
     <br><br>
     {% if platillo_seleccionado %}
