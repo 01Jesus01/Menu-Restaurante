@@ -48,11 +48,13 @@
                 <div>
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
                     
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button onclick="enviarOrden()" class="btn btn-primary">Enviar Orden</button>
+                    <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column;">
+                        <button onclick="enviarOrden()" class="btn btn-primary" style="width: 10rem; margin-left: 9rem;">Enviar Orden</button>
+                    <label for="cantidad">Numero de mesa</label>
+                    <input type="number" id="numeroMesa" name="numeroMesa" min="1" style="width: 4rem; margin-left: 12rem;">
                     </div>
                 </div>
-               
+                
             </div>
         </div>
     </div>
@@ -62,14 +64,25 @@
             <div class="row">
                 <div class="col-sm-4 col-lg-4 text-light text-center">
                     <p>Síguenos en:</p>
-                    <!-- Agregué los enlaces de redes sociales -->
+                    <a href="https://www.instagram.com/"><img src="https://cdn-icons-png.flaticon.com/256/1384/1384063.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://www.facebook.com/?locale=es_LA"><img src="https://cdn-icons-png.flaticon.com/256/2504/2504792.png" alt="Logo" width="30"
+                            height="30" class="d-inline-block align-text-top"></a>
+                    <a href="https://twitter.com/?lang=es"><img src="https://assets-global.website-files.com/5d66bdc65e51a0d114d15891/64cebc6c19c2fe31de94c78e_X-vector-logo-download.png"
+                            alt="Logo" width="30" height="30" class="d-inline-block align-text-top"></a>
+                    <p>@tHero Sounds</p>
                 </div>
                 <div class="col-sm-3 col-lg-4 text-light text-center">
                     &copy; 2024 @WebHeros. Todos los derechos reservados.
                 </div>
                 <div class="col-sm-5 col-lg-4 text-center">
                     <p>Contáctanos por:</p>
-                    <!-- Agregué los detalles de contacto -->
+                    <a class="link-1"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        HeroSounds@gmail.com</a></br>
+                    <a class="link-1"><img src="https://i.pinimg.com/originals/7e/71/4c/7e714c3c9148f4def7d3b5a704317df6.png" alt="Logo"
+                            width="15" height="15" class="d-inline-block align-text-top">
+                        33 1234 4567</a></br>
                 </div>
             </div>
         </div>
@@ -95,7 +108,7 @@
                             <img src="${platillo.imagenUrl}" class="card-img-top" alt="${platillo.nombre}">
                             <div class="card-body">
                                 <h5 class="card-title">${platillo.nombre}</h5>
-                                <p class="card-text">${platillo.descripcion}</p><br>
+                                <p class="card-text">${platillo.descripcion}</p><br><br>
                                 <p class="card-text">Precio: $${platillo.precio}</p>
                                 <textarea id="comentario_${index}" placeholder="Escribe un comentario"></textarea>
                                 <button class="btn btn-danger" onclick="borrarPlatillo(${index})">Borrar</button>
@@ -118,35 +131,36 @@
         });
 
         function enviarOrden() {
-            let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+        let platillos = JSON.parse(localStorage.getItem('platillos')) || [];
+        let numeroMesa = document.getElementById('numeroMesa').value; // Obtener el número de mesa
 
-            // Capturar comentarios de cada platillo
-            platillos = platillos.map((platillo, index) => {
-                const comentario = document.getElementById(`comentario_${index}`).value;
-                return { ...platillo, comentario };
-            });
+        // Capturar comentarios de cada platillo
+        platillos = platillos.map((platillo, index) => {
+            const comentario = document.getElementById(`comentario_${index}`).value;
+            return { ...platillo, comentario };
+        });
 
-            fetch('{% url "crear_orden" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ platillos: platillos })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message);
-                    localStorage.removeItem('platillos');
-                    window.location.href = '{% url "orden" %}';
-                } else {
-                    alert('Error al crear la orden');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+        fetch('{% url "crear_orden" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ platillos: platillos, numero_mesa: numeroMesa }) // Incluir el número de mesa
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                window.location.href = '/Menu/comprobante';
+            } else {
+                alert('Error al crear la orden');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
     </script>
+    <script src="{% static 'js/buscar.js' %}"></script>
 </body>
 
 </html>

@@ -50,7 +50,7 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0.5rem; width: 10rem;">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0.5rem; width: 11rem;">
                                 Bienvenido, {{ user.username }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -165,8 +165,6 @@
                 localStorage.setItem('platillos', JSON.stringify(platillos));
                 alert('Platillo agregado a la orden');
             }
-        
-            
         </script>
 
 <script src="{% static 'js/buscar.js' %}"></script>

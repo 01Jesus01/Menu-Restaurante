@@ -78,8 +78,10 @@
                 <div class="mt-4">
                     <h4 style="text-align: center;">Total de la orden: $<span id="totalOrden">0.00</span></h4>
                 </div>
-                <button id="insertarValoresBtn" class="btn btn-primary">Insertar Valores en Orden</button>
-                <button id="pagarBtn" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#pagoModal">Pagar</button>
+                <div style="margin-left: 8rem;">
+                    <button id="recibodetalle" class="btn btn-primary mt-3">Detalle de Orden</button>
+                    <button id="pagarBtn" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#pagoModal">Pagar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -191,7 +193,7 @@
 
             renderPlatillos();
 
-            document.getElementById('insertarValoresBtn').addEventListener('click', function() {
+            document.getElementById('recibodetalle').addEventListener('click', function() {
                 reciboDetalles.innerHTML = '';
                 let subtotal = 0;
 
@@ -231,6 +233,7 @@
 
             document.getElementById('confirmarPagoBtn').addEventListener('click', function() {
                 alert('¡Pago realizado con éxito!');
+                window.location.href = '/'; // Redirigir a index.html
                 platillos = [];
                 localStorage.setItem('platillos', JSON.stringify(platillos));
                 renderPlatillos();
@@ -241,7 +244,7 @@
         });
     </script>
     <script>
-        document.getElementById('insertarValoresBtn').addEventListener('click', function() {
+        document.getElementById('recibodetalle').addEventListener('click', function() {
             fetch('/ruta/a/insertar_valores_orden/', {
                 method: 'POST',
                 headers: {

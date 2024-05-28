@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     font-family: 'Franklin Gothic Demi'; 
@@ -5,7 +6,7 @@
 
 
 body {
-    background-image: url('/media/imagenes/black.jpg'); 
+    background-image: url('https://i.gifer.com/origin/65/65c6ed96a40bf5e00d4ac5a7a36845da_w200.gif'); 
     /* https://i.gifer.com/origin/65/65c6ed96a40bf5e00d4ac5a7a36845da_w200.gif */
     background-size: cover; 
     background-position: center; 
