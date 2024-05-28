@@ -23,7 +23,7 @@ class FormUser(forms.Form):
 class Form_Comments(forms.ModelForm):
     class Meta:
         model = Menu
-        fields = ['Nombre', 'Descripcion', 'imagen']
+        fields = ['Nombre', 'Descripcion', 'Precio','categoria', 'imagen']
 
 class RegistroForm(forms.ModelForm):
     username = forms.CharField(label='Username', max_length=150, help_text='')
